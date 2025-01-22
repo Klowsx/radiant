@@ -24,7 +24,7 @@ public class AuthService {
     // Registro de los usuarios
     public Usuario registrarUsuario(Usuario usuario) {
         if (usuarioRepository.findByCorreo(usuario.getCorreo()).isPresent()) {
-            throw new RuntimeException("Correo ya existe");
+            throw new RuntimeException("El correo ya esta registrado");
         }
 
         usuario.setContrasena(passwordEncoder.encode(usuario.getContrasena()));
@@ -35,7 +35,7 @@ public class AuthService {
     // Login
     public Usuario validarUsuario(String correo, String contrasena) {
         Usuario usuario = usuarioRepository.findByCorreo(correo)
-                .orElseThrow(() -> new RuntimeException("Correo no existe"));
+                .orElseThrow(() -> new RuntimeException("El correo no esta registrado"));
 
         if (!passwordEncoder.matches(contrasena, usuario.getContrasena())) {
             throw new RuntimeException("Contrasena incorrecta");

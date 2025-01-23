@@ -1,5 +1,6 @@
 package com.example.radiant.Service;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -47,16 +48,38 @@ public class ProductoService {
         return productoRepository.save(productoExistente);
     }
 
+    private static final List<String> formatoImagen = Arrays.asList("image/jpg", "image/png", "image/jpeg");
+
     public ImagenProducto agregarImagenProducto(Long productoId, MultipartFile archivo) throws Exception {
-        Producto producto = productoRepository.findById(productoId)
-                .orElseThrow(() -> new RuntimeException("Producto no encontrado"));
+        if (formatoImagen.contains(archivo.getContentType())) {
+            Producto producto = productoRepository.findById(productoId)
+                    .orElseThrow(() -> new RuntimeException("Producto no encontrado"));
 
-        String rutaArchivo = fileStorageService.guardarArchivo(archivo, "products");
+            String rutaArchivo = fileStorageService.guardarArchivo(archivo, "products");
 
-        ImagenProducto imagenProducto = new ImagenProducto();
-        imagenProducto.setProducto(producto);
-        imagenProducto.setRutaArchivo(rutaArchivo);
+            ImagenProducto imagenProducto = new ImagenProducto();
+            imagenProducto.setProducto(producto);
+            imagenProducto.setRutaArchivo(rutaArchivo);
 
-        return imagenProductoRepository.save(imagenProducto);
+            return imagenProductoRepository.save(imagenProducto);
+        } else {
+            throw new Exception("Formato no permitido.");
+        }
+    }
+
+    public void eliminarImagenProducto(Long imagenId) throws Exception {
+        ImagenProducto imagenProducto = imagenProductoRepository.findById(imagenId)
+                .orElseThrow(() -> new RuntimeException("Imagen no encontrada"));
+
+        fileStorageService.eliminarArchivo(imagenProducto.getRutaArchivo());
+
+        imagenProductoRepository.delete(imagenProducto);
+    }
+
+    public void eliminarProducto(Long id) {
+        Producto producto = productoRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Error al eliminar, producto no encontrado"));
+
+        productoRepository.delete(producto);
     }
 }

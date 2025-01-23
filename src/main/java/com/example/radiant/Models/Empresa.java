@@ -14,6 +14,15 @@ public class Empresa {
     private String telefono;
     private String correo;
     private String documento_verificacion;
+    private String estado_verificacion;
+
+    public String getEstado_verificacion() {
+        return estado_verificacion;
+    }
+
+    public void setEstado_verificacion(String estado_verificacion) {
+        this.estado_verificacion = estado_verificacion;
+    }
 
     public Long getId() {
         return id;

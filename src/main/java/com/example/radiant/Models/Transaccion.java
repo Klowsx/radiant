@@ -17,7 +17,7 @@ public class Transaccion {
     @JoinColumn(name = "pedido_id", referencedColumnName = "id")
     private Pedido pedido;
 
-    private String metodoPago; // 'tarjeta', 'transferencia', etc.
+    private String metodoPago;
     private String estado; // 'completado', 'fallido', 'pendiente'
 
     private LocalDateTime creadoEn;

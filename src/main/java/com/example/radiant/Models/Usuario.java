@@ -20,6 +20,10 @@ public class Usuario {
     private String contrasena;
     private String rol;
 
+    public Usuario(Long usuarioId) {
+        this.id = usuarioId;
+    }
+
     public Long getId() {
         return id;
     }

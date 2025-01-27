@@ -70,4 +70,9 @@ public class Pedido {
     public void setEstado(String estado) {
         this.estado = estado;
     }
+
+    public Pedido orElseThrow(Object object) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'orElseThrow'");
+    }
 }

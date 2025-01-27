@@ -30,6 +30,10 @@ public class Producto {
     @Temporal(TemporalType.TIMESTAMP)
     private Date actualizadoEn;
 
+    public Producto(Long productoId) {
+        this.id = productoId;
+    }
+
     public Long getId() {
         return id;
     }

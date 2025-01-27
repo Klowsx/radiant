@@ -6,6 +6,6 @@ import org.springframework.stereotype.Repository;
 import com.example.radiant.Models.DetallePedido;
 
 @Repository
-public interface DetalleRepository extends JpaRepository<DetallePedido, Long> {
+public interface DetallePedidoRepository extends JpaRepository<DetallePedido, Long> {
 
 }

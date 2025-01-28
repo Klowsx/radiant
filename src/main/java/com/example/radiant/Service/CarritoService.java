@@ -10,15 +10,11 @@ import com.example.radiant.Models.DetalleCarrito;
 import com.example.radiant.Models.Producto;
 import com.example.radiant.Models.Usuario;
 import com.example.radiant.Repositories.CarritoRepository;
-import com.example.radiant.Repositories.DetallesCarritoRepository;
 
 @Service
 public class CarritoService {
     @Autowired
     private CarritoRepository carritoRepository;
-
-    @Autowired
-    private DetallesCarritoRepository detallesCarritoRepository;
 
     public Carrito obtenerCarritoPorUsuario(Long usuarioId) {
         return carritoRepository.findByUsuarioId(usuarioId)

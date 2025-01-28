@@ -16,6 +16,13 @@ public class Empresa {
     private String documento_verificacion;
     private String estado_verificacion;
 
+    public Empresa() {
+    }
+
+    public Empresa(Long id) {
+        this.id = id;
+    }
+
     public String getEstado_verificacion() {
         return estado_verificacion;
     }

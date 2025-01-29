@@ -25,28 +25,23 @@ public class AuthController {
     private JwtUtil jwtUtil;
 
     @Autowired
-    private AuthService usuarioService;
-
-    @GetMapping("/all")
-    public List<User> getAllUsuarios() {
-        return usuarioService.getAllUsers();
-    }
+    private AuthService authService;
 
     @PostMapping("/register")
-    public ResponseEntity<User> registrarUsuario(@RequestBody User usuario) {
-        User nuevoUsuario = usuarioService.registerUser(usuario);
-        return ResponseEntity.ok(nuevoUsuario);
+    public ResponseEntity<User> registerUser(@RequestBody User usuario) {
+        User newUser = authService.registerUser(usuario);
+        return ResponseEntity.ok(newUser);
     }
 
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody LoginRequest loginRequest) {
-        User usuario = usuarioService.validateUser(loginRequest.getEmail(), loginRequest.getPassword());
+        User user = authService.validateUser(loginRequest.getEmail(), loginRequest.getPassword());
 
-        if (usuario == null) {
+        if (user == null) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Credenciales incorrectas");
         }
 
-        String token = jwtUtil.generarToken(usuario.getEmail());
+        String token = jwtUtil.generarToken(user.getEmail());
         return ResponseEntity.ok(new LoginResponse(token));
     }
 

@@ -17,30 +17,30 @@ import com.example.radiant.Models.User;
 import com.example.radiant.Service.UserService;
 
 @RestController
-@RequestMapping("/usuario")
+@RequestMapping("/user")
 public class UserController {
     @Autowired
-    private UserService usuarioService;
+    private UserService userService;
 
-    @GetMapping("/todos")
-    public List<User> getTodos() {
-        return usuarioService.getAllUsers();
+    @GetMapping("/all")
+    public List<User> getAll() {
+        return userService.getAllUsers();
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<User> obtenerUsuarioPorId(@PathVariable Long id) {
-        Optional<User> usuario = usuarioService.getUserById(id);
-        return usuario.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
+    public ResponseEntity<User> getUserById(@PathVariable Long id) {
+        Optional<User> user = userService.getUserById(id);
+        return user.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
-    @PutMapping("/actualizar/{id}")
-    public ResponseEntity<User> actualizarUsuario(@RequestBody User usuario, @PathVariable Long id) {
-        return ResponseEntity.ok(usuarioService.updateUser(id, usuario));
+    @PutMapping("/update/{id}")
+    public ResponseEntity<User> actualizarUsuario(@RequestBody User user, @PathVariable Long id) {
+        return ResponseEntity.ok(userService.updateUser(id, user));
     }
 
-    @DeleteMapping("/eliminar/{id}")
-    public ResponseEntity<Void> eliminarUsuario(@PathVariable Long id) {
-        usuarioService.deleteUser(id);
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<Void> deleteUser(@PathVariable Long id) {
+        userService.deleteUser(id);
         return ResponseEntity.ok().build();
     }
 }

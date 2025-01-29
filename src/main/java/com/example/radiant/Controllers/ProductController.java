@@ -6,6 +6,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -22,46 +23,50 @@ import com.example.radiant.Models.Product;
 import com.example.radiant.Service.ProductService;
 
 @RestController
-@RequestMapping("/producto")
+@RequestMapping("/product")
 public class ProductController {
     @Autowired
-    private ProductService productoService;
+    private ProductService productService;
 
-    @GetMapping("/todos")
-    public List<Product> obtenerTodosLosProductos() {
-        return productoService.getAllProducts();
+    @GetMapping("/all")
+    public List<Product> getAllProducts() {
+        return productService.getAllProducts();
     }
 
-    @PostMapping("/crear")
-    public ResponseEntity<Product> crearProducto(@RequestBody Product producto) {
-        Product nuevoProducto = productoService.addProduct(producto);
-        return ResponseEntity.ok(nuevoProducto);
+    @PostMapping("/add")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<Product> addProduct(@RequestBody Product product) {
+        Product newProduct = productService.addProduct(product);
+        return ResponseEntity.ok(newProduct);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Product> obtenerProductoPorId(@PathVariable Long id) {
-        Optional<Product> producto = productoService.getProductById(id);
-        return producto.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
+    public ResponseEntity<Product> getProductById(@PathVariable Long id) {
+        Optional<Product> product = productService.getProductById(id);
+        return product.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
-    @PutMapping("/actualizar/{id}")
-    public ResponseEntity<Product> actualizarProducto(@PathVariable Long id, @RequestBody Product producto) {
-        Product productoActualizado = productoService.updateProduct(id, producto);
-        return ResponseEntity.ok(productoActualizado);
+    @PutMapping("/update/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<Product> updateProduct(@PathVariable Long id, @RequestBody Product product) {
+        Product updatedProduct = productService.updateProduct(id, product);
+        return ResponseEntity.ok(updatedProduct);
     }
 
-    @DeleteMapping("/eliminar/{id}")
-    public ResponseEntity<Void> eliminarProducto(@PathVariable Long id) {
-        productoService.deleteProduct(id);
+    @DeleteMapping("/delete/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<Void> deleteProduct(@PathVariable Long id) {
+        productService.deleteProduct(id);
         return ResponseEntity.ok().build();
     }
 
     @PostMapping("/{id}/agregar-imagen")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<ProductImage> agregarImagenProducto(
             @PathVariable Long id,
             @RequestParam("archivo") MultipartFile archivo) {
         try {
-            ProductImage imagenProducto = productoService.addProductImage(id, archivo);
+            ProductImage imagenProducto = productService.addProductImage(id, archivo);
             return ResponseEntity.ok(imagenProducto);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
@@ -69,9 +74,10 @@ public class ProductController {
     }
 
     @DeleteMapping("/imagenes/{imagenId}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<String> eliminarImagenProducto(@PathVariable Long imagenId) {
         try {
-            productoService.deleteProductImage(imagenId);
+            productService.deleteProductImage(imagenId);
             return ResponseEntity.ok("Imagen eliminada con éxito");
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)

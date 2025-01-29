@@ -18,7 +18,7 @@ public class User {
     private String last_name;
     private String email;
     private String password;
-    private String role;
+    private Role role;
 
     public User(Long usuarioId) {
         this.id = usuarioId;
@@ -64,11 +64,11 @@ public class User {
         this.password = contrasena;
     }
 
-    public String getRole() {
+    public Role getRole() {
         return role;
     }
 
-    public void setRole(String rol) {
+    public void setRole(Role rol) {
         this.role = rol;
     }
 

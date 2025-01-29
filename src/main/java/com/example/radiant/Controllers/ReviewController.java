@@ -18,32 +18,32 @@ import com.example.radiant.Models.Review;
 import com.example.radiant.Service.ReviewService;
 
 @RestController
-@RequestMapping("/resena")
+@RequestMapping("/review")
 public class ReviewController {
     @Autowired
-    private ReviewService resenaService;
+    private ReviewService reviewService;
 
-    @PostMapping("/agregar/")
-    public ResponseEntity<Review> agregarResena(@RequestBody Review resena) {
-        Review nuevaResena = resenaService.addReview(resena);
-        return ResponseEntity.ok(nuevaResena);
+    @PostMapping("/add/")
+    public ResponseEntity<Review> addReview(@RequestBody Review resena) {
+        Review newReview = reviewService.addReview(resena);
+        return ResponseEntity.ok(newReview);
     }
 
-    @PutMapping("/actualizar/{id}")
-    public ResponseEntity<Review> actualizarResena(@PathVariable Long id, @RequestBody Review resena) {
-        Review resenaActualizada = resenaService.updateReview(id, resena);
+    @PutMapping("/update/{id}")
+    public ResponseEntity<Review> updateReview(@PathVariable Long id, @RequestBody Review resena) {
+        Review resenaActualizada = reviewService.updateReview(id, resena);
         return ResponseEntity.ok(resenaActualizada);
     }
 
-    @DeleteMapping("/eliminar/{id}")
-    public ResponseEntity<String> eliminarResena(@PathVariable Long id) {
-        resenaService.deleteReview(id);
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<String> deleteReview(@PathVariable Long id) {
+        reviewService.deleteReview(id);
         return ResponseEntity.ok("Reseña eliminada correctamente");
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Review> obtenerResena(@PathVariable Long id) {
-        Optional<Review> resena = resenaService.getReviewById(id);
-        return resena.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
+    public ResponseEntity<Review> getReview(@PathVariable Long id) {
+        Optional<Review> review = reviewService.getReviewById(id);
+        return review.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 }

@@ -5,6 +5,10 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -15,40 +19,55 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.radiant.Models.Order;
+import com.example.radiant.Models.User;
 import com.example.radiant.Service.OrderService;
 
 @RestController
-@RequestMapping("/pedido")
+@RequestMapping("/order")
 public class OrderController {
     @Autowired
-    private OrderService pedidoService;
+    private OrderService orderService;
 
-    @GetMapping("/todos")
-    public List<Order> getAllPedidos() {
-        return pedidoService.getAllOrders();
+    @Autowired
+    private User user;
+
+    @GetMapping("/all")
+    public List<Order> getAllOrders() {
+        return orderService.getAllOrders();
     }
 
     @GetMapping("/{id}")
-    public Order obtenerPedidoPorId(@PathVariable Long id) {
-        return pedidoService.getOrderById(id);
+    public Order getOrderById(@PathVariable Long id) {
+        return orderService.getOrderById(id);
     }
 
-    @GetMapping("/usuario/{usuarioId}")
-    public List<Order> obtenerPedidosUsuario(@PathVariable Long usuarioId) {
-        return pedidoService.getOrdersByUser(usuarioId);
+    @GetMapping("/user/{usuarioId}")
+    @PreAuthorize("hasRole('ADMIN')")
+    public List<Order> getOrdersByUser(@PathVariable Long usuarioId) {
+        return orderService.getOrdersByUser(usuarioId);
     }
 
-    @PatchMapping("/estado/{id}")
-    public ResponseEntity<Order> actualizarEstado(@PathVariable Long id, @RequestParam String estado) {
+    @PatchMapping("/state/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<Order> updateOrderStatus(@PathVariable Long id, @RequestParam String estado) {
 
-        Order pedidoActualizado = pedidoService.updateOrderStatus(id, estado);
-        return ResponseEntity.ok(pedidoActualizado);
+        Order updatedOrder = orderService.updateOrderStatus(id, estado);
+        return ResponseEntity.ok(updatedOrder);
     }
 
-    @DeleteMapping("eliminar/{id}")
-    public ResponseEntity<String> eliminarPedido(@PathVariable Long id) {
-        pedidoService.deleteOrder(id);
-        return ResponseEntity.ok("Pedido eliminado con exito");
+    @DeleteMapping("delete/{id}")
+    public ResponseEntity<String> deleteOrder(@PathVariable Long id, Authentication authentication) {
+        Order order = orderService.getOrderById(id);
+
+        Long loggedUser = Long.parseLong(authentication.getName());
+        System.out.println("USERNAME DEL USUARIO CONECTADO: " + loggedUser);
+
+        if (order.getUser().getId().equals(loggedUser)) {
+            orderService.deleteOrder(id);
+            return ResponseEntity.ok("Pedido eliminado");
+        } else {
+            return ResponseEntity.badRequest().body("No tienes permiso para eliminar este pedido");
+        }
     }
 
 }

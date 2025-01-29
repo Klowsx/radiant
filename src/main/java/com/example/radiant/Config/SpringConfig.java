@@ -15,6 +15,8 @@ public class SpringConfig {
         http
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
+                        // .requestMatchers("/admin/**").hasRole("ADMIN")
+                        // .requestMatchers("/user/**").hasAnyRole("USER", "ADMIN")
                         .anyRequest().permitAll())
                 .formLogin(login -> login.disable());
         return http.build();

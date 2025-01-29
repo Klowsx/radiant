@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.example.radiant.Models.Role;
 import com.example.radiant.Models.User;
 import com.example.radiant.Repositories.AuthRepository;
 
@@ -17,16 +18,13 @@ public class AuthService {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-    public List<User> getAllUsers() {
-        return userRepository.findAll();
-    }
-
     // Registro de los usuarios
     public User registerUser(User user) {
         if (userRepository.findByEmail(user.getEmail()).isPresent()) {
             throw new RuntimeException("El correo ya esta registrado");
         }
 
+        user.setRole(Role.USER);
         user.setPassword(passwordEncoder.encode(user.getPassword()));
 
         return userRepository.save(user);

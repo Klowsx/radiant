@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.example.radiant.Config.JwtUtil;
 import com.example.radiant.Models.LoginRequest;
 import com.example.radiant.Models.LoginResponse;
-import com.example.radiant.Models.Usuario;
+import com.example.radiant.Models.User;
 import com.example.radiant.Service.AuthService;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -27,26 +27,26 @@ public class AuthController {
     @Autowired
     private AuthService usuarioService;
 
-    @GetMapping("/todos")
-    public List<Usuario> getAllUsuarios() {
-        return usuarioService.getAllUsuarios();
+    @GetMapping("/all")
+    public List<User> getAllUsuarios() {
+        return usuarioService.getAllUsers();
     }
 
-    @PostMapping("/registro")
-    public ResponseEntity<Usuario> registrarUsuario(@RequestBody Usuario usuario) {
-        Usuario nuevoUsuario = usuarioService.registrarUsuario(usuario);
+    @PostMapping("/register")
+    public ResponseEntity<User> registrarUsuario(@RequestBody User usuario) {
+        User nuevoUsuario = usuarioService.registerUser(usuario);
         return ResponseEntity.ok(nuevoUsuario);
     }
 
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody LoginRequest loginRequest) {
-        Usuario usuario = usuarioService.validarUsuario(loginRequest.getCorreo(), loginRequest.getContrasena());
+        User usuario = usuarioService.validateUser(loginRequest.getEmail(), loginRequest.getPassword());
 
         if (usuario == null) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Credenciales incorrectas");
         }
 
-        String token = jwtUtil.generarToken(usuario.getCorreo());
+        String token = jwtUtil.generarToken(usuario.getEmail());
         return ResponseEntity.ok(new LoginResponse(token));
     }
 

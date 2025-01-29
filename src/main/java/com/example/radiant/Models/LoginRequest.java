@@ -1,30 +1,30 @@
 package com.example.radiant.Models;
 
 public class LoginRequest {
-    private String correo;
-    private String contrasena;
+    private String email;
+    private String password;
 
     public LoginRequest() {
     }
 
     public LoginRequest(String correo, String contrasena) {
-        this.correo = correo;
-        this.contrasena = contrasena;
+        this.email = correo;
+        this.password = contrasena;
     }
 
-    public String getCorreo() {
-        return correo;
+    public String getEmail() {
+        return email;
     }
 
-    public void setCorreo(String correo) {
-        this.correo = correo;
+    public void setEmail(String correo) {
+        this.email = correo;
     }
 
-    public String getContrasena() {
-        return contrasena;
+    public String getPassword() {
+        return password;
     }
 
-    public void setContrasena(String contrasena) {
-        this.contrasena = contrasena;
+    public void setPassword(String contrasena) {
+        this.password = contrasena;
     }
 }

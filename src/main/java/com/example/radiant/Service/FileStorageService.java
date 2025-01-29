@@ -17,21 +17,21 @@ public class FileStorageService {
     @Autowired
     private FileStorageConfig fileStorageConfig;
 
-    public String guardarArchivo(MultipartFile archivo, String tipoArchivo) throws Exception {
+    public String saveFile(MultipartFile file, String fileType) throws Exception {
 
-        Path uploadPath = fileStorageConfig.getUploadPath(tipoArchivo);
+        Path uploadPath = fileStorageConfig.getUploadPath(fileType);
 
-        String archivoNombre = System.currentTimeMillis() + "_" + archivo.getOriginalFilename();
+        String fileName = System.currentTimeMillis() + "_" + file.getOriginalFilename();
 
-        Path destino = uploadPath.resolve(archivoNombre);
+        Path destination = uploadPath.resolve(fileName);
 
-        Files.copy(archivo.getInputStream(), destino, StandardCopyOption.REPLACE_EXISTING);
+        Files.copy(file.getInputStream(), destination, StandardCopyOption.REPLACE_EXISTING);
 
-        return destino.toString();
+        return destination.toString();
     }
 
-    public void eliminarArchivo(String rutaArchivo) throws Exception {
-        Path path = Paths.get(rutaArchivo);
+    public void deleteFile(String filePath) throws Exception {
+        Path path = Paths.get(filePath);
 
         Files.deleteIfExists(path);
     }

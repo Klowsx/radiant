@@ -6,40 +6,40 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import com.example.radiant.Models.Usuario;
+import com.example.radiant.Models.User;
 import com.example.radiant.Repositories.AuthRepository;
 
 @Service
 public class AuthService {
     @Autowired
-    private AuthRepository usuarioRepository;
+    private AuthRepository userRepository;
 
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-    public List<Usuario> getAllUsuarios() {
-        return usuarioRepository.findAll();
+    public List<User> getAllUsers() {
+        return userRepository.findAll();
     }
 
     // Registro de los usuarios
-    public Usuario registrarUsuario(Usuario usuario) {
-        if (usuarioRepository.findByCorreo(usuario.getCorreo()).isPresent()) {
+    public User registerUser(User user) {
+        if (userRepository.findByEmail(user.getEmail()).isPresent()) {
             throw new RuntimeException("El correo ya esta registrado");
         }
 
-        usuario.setContrasena(passwordEncoder.encode(usuario.getContrasena()));
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
 
-        return usuarioRepository.save(usuario);
+        return userRepository.save(user);
     }
 
     // Login
-    public Usuario validarUsuario(String correo, String contrasena) {
-        Usuario usuario = usuarioRepository.findByCorreo(correo)
+    public User validateUser(String email, String password) {
+        User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new RuntimeException("El correo no esta registrado"));
 
-        if (!passwordEncoder.matches(contrasena, usuario.getContrasena())) {
+        if (!passwordEncoder.matches(password, user.getPassword())) {
             throw new RuntimeException("Contrasena incorrecta");
         }
-        return usuario;
+        return user;
     }
 }

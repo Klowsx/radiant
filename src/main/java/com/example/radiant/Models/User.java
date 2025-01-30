@@ -1,6 +1,8 @@
 package com.example.radiant.Models;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -18,6 +20,8 @@ public class User {
     private String last_name;
     private String email;
     private String password;
+
+    @Enumerated(EnumType.STRING)
     private Role role;
 
     public User(Long usuarioId) {

@@ -1,4 +1,4 @@
-package com.example.radiant.Models;
+package com.example.radiant.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -9,10 +9,7 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class RegisterRequest {
+public class LoginRequest {
     private String email;
     private String password;
-    private String name;
-    private String last_name;
-    private String address;
 }

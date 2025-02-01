@@ -7,12 +7,12 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.example.radiant.Config.JwtUtil;
-import com.example.radiant.Models.AuthResponse;
-import com.example.radiant.Models.LoginRequest;
-import com.example.radiant.Models.RegisterRequest;
 import com.example.radiant.Models.Role;
 import com.example.radiant.Models.User;
 import com.example.radiant.Repositories.AuthRepository;
+import com.example.radiant.dto.AuthResponse;
+import com.example.radiant.dto.LoginRequest;
+import com.example.radiant.dto.RegisterRequest;
 
 @Service
 public class AuthService {

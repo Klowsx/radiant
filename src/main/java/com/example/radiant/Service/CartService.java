@@ -10,6 +10,7 @@ import com.example.radiant.Models.CartDetail;
 import com.example.radiant.Models.Product;
 import com.example.radiant.Models.User;
 import com.example.radiant.Repositories.CartRepository;
+import com.example.radiant.dto.CartRequest;
 
 @Service
 public class CartService {
@@ -25,15 +26,14 @@ public class CartService {
                 });
     }
 
-    public Cart addToCart(Long userId, Long productId, Integer quantity,
-            BigDecimal unitPrice) {
+    public Cart addToCart(Long userId, CartRequest cartRequest) {
         Cart cart = getCartByUser(userId);
 
         CartDetail detail = new CartDetail();
         detail.setCart(cart);
-        detail.setProduct(new Product(productId));
-        detail.setQuantity(quantity);
-        detail.setUnit_price(unitPrice);
+        detail.setProduct(new Product(cartRequest.getProductId()));
+        detail.setQuantity(cartRequest.getQuantity());
+        detail.setUnit_price(cartRequest.getUnitPrice());
 
         cart.getDetails().add(detail);
         return cartRepository.save(cart);

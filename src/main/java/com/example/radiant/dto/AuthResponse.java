@@ -1,4 +1,6 @@
-package com.example.radiant.Models;
+package com.example.radiant.dto;
+
+import com.example.radiant.Models.User;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

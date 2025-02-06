@@ -8,19 +8,21 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
 
 @Entity
+@Table(name = "transaction")
 public class Transaction {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "pedido_id", referencedColumnName = "id")
+    @JoinColumn(name = "order_id", referencedColumnName = "id")
     private Order order;
 
     private String payment_method;
-    private String state; // 'completado', 'fallido', 'pendiente'
+    private String status; // 'completado', 'fallido', 'pendiente'
 
     private LocalDateTime created_on;
 
@@ -48,12 +50,12 @@ public class Transaction {
         this.payment_method = metodoPago;
     }
 
-    public String getState() {
-        return state;
+    public String getStatus() {
+        return status;
     }
 
-    public void setState(String estado) {
-        this.state = estado;
+    public void setStatus(String estado) {
+        this.status = estado;
     }
 
     public LocalDateTime getCreated_on() {

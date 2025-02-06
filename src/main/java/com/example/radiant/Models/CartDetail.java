@@ -12,23 +12,23 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name = "detalles_carrito")
+@Table(name = "cart_detail")
 public class CartDetail {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "carrito_id", nullable = false)
+    @JoinColumn(name = "cart_id", nullable = false)
     private Cart cart;
 
     @ManyToOne
-    @JoinColumn(name = "producto_id", nullable = false)
+    @JoinColumn(name = "product_id", nullable = false)
     private Product product;
 
     private Integer quantity;
 
-    @Column(name = "precio_unitario")
+    @Column(name = "unit_price")
     private BigDecimal unit_price;
 
     public Long getId() {

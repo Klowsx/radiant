@@ -6,23 +6,24 @@ import java.util.List;
 import jakarta.persistence.*;
 
 @Entity
+@Table(name = "order")
 public class Order {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "usuario_id", referencedColumnName = "id")
+    @JoinColumn(name = "user_id", referencedColumnName = "id")
     private User user;
 
-    @OneToMany(mappedBy = "pedido", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
     private List<OrderDetail> orderDetail;
 
-    @OneToMany(mappedBy = "pedido", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
     private List<Transaction> transaction;
 
     private BigDecimal total;
-    private String state;
+    private String status;
 
     public Long getId() {
         return id;
@@ -64,11 +65,11 @@ public class Order {
         this.total = total;
     }
 
-    public String getState() {
-        return state;
+    public String getStatus() {
+        return status;
     }
 
-    public void setState(String estado) {
-        this.state = estado;
+    public void setStatus(String estado) {
+        this.status = estado;
     }
 }

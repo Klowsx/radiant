@@ -28,9 +28,6 @@ public class OrderController {
     @Autowired
     private OrderService orderService;
 
-    @Autowired
-    private User user;
-
     @GetMapping("/all")
     public List<Order> getAllOrders() {
         return orderService.getAllOrders();

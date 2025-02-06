@@ -17,7 +17,7 @@ import jakarta.persistence.Table;
 import lombok.Data;
 
 @Entity
-@Table(name = "carritos")
+@Table(name = "cart")
 @Data
 public class Cart {
     @Id
@@ -25,15 +25,15 @@ public class Cart {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "usuario_id", nullable = false)
+    @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
-    @OneToMany(mappedBy = "carrito", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "cart", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<CartDetail> details = new ArrayList<>();
 
-    @Column(name = "creado_en")
+    @Column(name = "created_on")
     private LocalDateTime createdOn = LocalDateTime.now();
 
-    @Column(name = "actualizado_en")
+    @Column(name = "updated_on")
     private LocalDateTime updatedOn = LocalDateTime.now();
 }

@@ -12,8 +12,7 @@ import org.springframework.stereotype.Component;
 
 import com.example.radiant.Models.User;
 
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
 
 @Component
@@ -26,12 +25,11 @@ public class JwtUtil {
 
     public String generateToken(User user) {
         return Jwts.builder()
-                .subject(String.valueOf(user.getId()))
-                .issuedAt(new Date(System.currentTimeMillis()))
-                .expiration(new Date(System.currentTimeMillis() + expiration))
-                .signWith(getSignInKey(), Jwts.SIG.HS256)
+                .setSubject(String.valueOf(user.getId()))
+                .setIssuedAt(new Date(System.currentTimeMillis()))
+                .setExpiration(new Date(System.currentTimeMillis() + expiration))
+                .signWith(getSignInKey(), SignatureAlgorithm.HS256)
                 .compact();
-
     }
 
     private SecretKey getSignInKey() {
@@ -62,11 +60,9 @@ public class JwtUtil {
     }
 
     private Claims extractAllClaims(String token) {
-        return Jwts.parser()
-                .verifyWith(getSignInKey())
-                .build()
-                .parseSignedClaims(token)
-                .getPayload();
+        JwtParser parser = Jwts.parserBuilder()
+                .setSigningKey(getSignInKey())
+                .build();
+        return parser.parseClaimsJws(token).getBody();
     }
-
 }

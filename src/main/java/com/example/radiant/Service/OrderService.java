@@ -35,7 +35,7 @@ public class OrderService {
         }
         Order order = new Order();
         order.setUser(cart.getUser());
-        order.setState("pendiente");
+        order.setStatus("pendiente");
 
         BigDecimal total = BigDecimal.ZERO;
         List<OrderDetail> orderDetails = new ArrayList<>();
@@ -81,7 +81,7 @@ public class OrderService {
         Order order = orderRepository.findById(id)
                 .orElseThrow(() -> new NoSuchElementException("Pedido no encontrado"));
 
-        order.setState(newState);
+        order.setStatus(newState);
         return orderRepository.save(order);
     }
 

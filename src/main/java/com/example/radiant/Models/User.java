@@ -23,7 +23,7 @@ import lombok.Setter;
 @Setter
 @Getter
 @Entity
-@Table(name = "usuarios")
+@Table(name = "users")
 public class User implements UserDetails {
 
     @Id
@@ -35,6 +35,7 @@ public class User implements UserDetails {
     private String email;
     private String password;
     private String address;
+    private String phone;
 
     @Enumerated(EnumType.STRING)
     private Role role;

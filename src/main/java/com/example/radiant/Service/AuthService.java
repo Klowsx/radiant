@@ -2,7 +2,6 @@ package com.example.radiant.Service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -12,6 +11,7 @@ import com.example.radiant.Models.User;
 import com.example.radiant.Repositories.AuthRepository;
 import com.example.radiant.dto.AuthResponse;
 import com.example.radiant.dto.LoginRequest;
+import com.example.radiant.dto.LoginResponse;
 import com.example.radiant.dto.RegisterRequest;
 
 @Service
@@ -38,9 +38,11 @@ public class AuthService {
         User user = new User();
         user.setEmail(request.getEmail());
         user.setRole(Role.USER);
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        user.setPassword(passwordEncoder.encode(request.getPassword()));
         user.setName(request.getName());
         user.setLast_name(request.getLast_name());
+        user.setPhone(request.getPhone());
+        user.setAddress(request.getAddress());
 
         User savedUser = userRepository.save(user);
         String token = jwtUtil.generateToken(savedUser);
@@ -49,17 +51,23 @@ public class AuthService {
 
     // Login
     public AuthResponse login(LoginRequest request) {
-        try {
-            authenticationManager
-                    .authenticate(new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword()));
-        } catch (Exception e) {
+        User user = userRepository.findByEmail(request.getEmail())
+                .orElseThrow(() -> new RuntimeException("El usuario no está registrado"));
+
+        if (!passwordEncoder.matches(request.getPassword(), user.getPassword())) {
             throw new RuntimeException("Credenciales invalidas");
         }
-
-        User user = userRepository.findByEmail(request.getEmail())
-                .orElseThrow(() -> new RuntimeException("El usuario no esta registrado"));
-
         String token = jwtUtil.generateToken(user);
-        return new AuthResponse(token, user);
+
+        LoginResponse infoUser = new LoginResponse(
+                user.getId(),
+                user.getName(),
+                user.getLast_name(),
+                user.getEmail(),
+                user.getRole());
+
+        // Devolver la respuesta con el token y el usuario
+        return new AuthResponse(token, infoUser);
     }
+
 }

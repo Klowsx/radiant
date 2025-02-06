@@ -3,14 +3,14 @@ package com.example.radiant.Models;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "imagenes_productos")
+@Table(name = "product_image")
 public class ProductImage {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "producto_id", nullable = false)
+    @JoinColumn(name = "product_id", nullable = false)
     private Product product;
 
     private String file_path;

@@ -1,4 +1,4 @@
-package com.example.radiant.Models;
+package com.example.radiant.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 

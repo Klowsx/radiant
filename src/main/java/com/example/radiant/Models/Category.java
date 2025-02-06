@@ -3,7 +3,7 @@ package com.example.radiant.Models;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "Categorias")
+@Table(name = "categories")
 public class Category {
 
     @Id
